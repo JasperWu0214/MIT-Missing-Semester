@@ -1,0 +1,12 @@
+/tmp:
+clash-verge-service.sock
+codex-browser-use
+com_ccswitch_desktop_si.sock
+com_wldc_llgnetwork_macos_app_si.sock
+com.openai.sky.CUAService
+CrashUpload-sEqhZ
+dumps
+missing-semester-course-shell.html
+powerlog
+steam_chrome_shmem_uid501_spid823
+steam.pipe

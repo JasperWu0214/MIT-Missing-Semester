@@ -1,15 +1,21 @@
 # MIT Missing Semester Notes
 
-These are my personal notes from MIT's course, [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/).
+Personal notes for MIT's [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/), organized around the 2026 Chinese course materials.
 
-This repository covers practical computing tools and techniques introduced in the course, including the shell, command-line utilities, text processing, and version control. The notes will be expanded and refined as I progress through the course.
+The notes use the Cornell method: each lecture includes cue questions, concise explanations, standalone command examples, a knowledge map, a summary, self-test questions, and a one-page cheat sheet.
 
-## Current Notes
+## Course Notes
 
-- [Lecture 1 Cheat Sheet: Shell Basics](./Lecture%201%20Cheat%20Sheet.md)
+| Lecture | Topic | Notes | Course Page |
+|---|---|---|---|
+| 1 | Course Overview + Shell | [Cornell Notes](./missing-semester-lecture1-cornell-notes.md) | [2026 Chinese notes](https://missing-semester-cn.github.io/2026/course-shell/) |
+| 2 | Command-Line Environment | [Cornell Notes](./missing-semester-lecture2-final-cornell-notes.md) | [2026 Chinese notes](https://missing-semester-cn.github.io/2026/command-line-environment/) |
 
-## Notes
+## Conventions
 
-- Command examples are presented in separate code blocks for easy reading and copying.
-- Some examples are written for macOS; options may differ on other operating systems.
-- These are personal study notes, so corrections and suggestions are welcome.
+- Explanations are primarily written in Chinese, with important English terminology preserved.
+- Commands and scripts are displayed in standalone code blocks for easy reading and copying.
+- Examples target Unix-like shells, especially `zsh` and `bash` on macOS.
+- Platform-specific behavior is noted when it differs from GNU/Linux.
+
+These are personal study notes and may continue to evolve as the course progresses. Corrections and suggestions are welcome.

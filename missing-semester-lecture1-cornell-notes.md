@@ -1,7 +1,12 @@
 # Missing Semester Lecture 1 — Cornell Notes
 
-> 课程：The Missing Semester of Your CS Education  
-> Lecture 1：Course Overview + Shell 入门
+> **课程：** The Missing Semester of Your CS Education
+>
+> **Lecture 1：** Course Overview + Shell 入门
+>
+> **主题：** Shell、文件系统、文本工具、数据流与 Bash 脚本
+>
+> **参考：** [2026 中文课程页面](https://missing-semester-cn.github.io/2026/course-shell/)
 
 ---
 
@@ -521,6 +526,36 @@ which ls
 | `find` | 找文件 |
 | `awk` | 按列或结构处理文本 |
 
+### `sed`
+
+`sed` 是 stream editor，最常见的用途是按模式替换文本：
+
+```bash
+sed 's/pattern/replacement/g' file.txt
+```
+
+结尾的 `g` 表示替换每一行中的所有匹配项。macOS 原地修改文件时使用：
+
+```bash
+sed -i '' 's/pattern/replacement/g' file.txt
+```
+
+原地修改前，建议先去掉 `-i ''` 预览结果。
+
+### `awk`
+
+`awk` 适合处理按列组织的数据。输出每一行的第 2 列：
+
+```bash
+awk '{print $2}' file.txt
+```
+
+处理逗号分隔的 CSV：
+
+```bash
+awk -F, '{print $2}' file.csv
+```
+
 ---
 
 ## 19. `cat`
@@ -609,6 +644,12 @@ find ~/Downloads -type f -name "*.zip" -mtime +30
 -mtime +30   → 超过 30 天
 ```
 
+`-exec` 可以对每个匹配结果执行命令，`{}` 会被替换为文件路径，`\;` 表示命令结束：
+
+```bash
+find ~ -type f -size +100M -exec ls -lh {} \;
+```
+
 ---
 
 ## 25. Glob
@@ -687,6 +728,8 @@ B 的 stdin
 ```bash
 cat file.txt | grep hello
 ```
+
+Pipeline 中的程序通常会同时启动，数据产生后直接流向下一段，而不是等待前一个程序全部结束。
 
 可以理解为：
 
@@ -941,7 +984,7 @@ script.sh
 例如：
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "hello"
 date
@@ -959,14 +1002,14 @@ chmod +x script.sh
 ## 42. Shebang `#!`
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 ```
 
 叫 shebang。
 
 作用：
 
-> 告诉系统这个脚本应该交给 `/bin/bash` 解释执行。
+> 通过当前环境中的 `bash` 解释执行脚本，比写死解释器路径更便于跨系统使用。
 
 ---
 
@@ -1002,6 +1045,12 @@ Shell 会显示它实际执行的命令。
 
 ```text
 -x = execution trace
+```
+
+脚本写完后，可以使用 `shellcheck` 检查常见问题：
+
+```bash
+shellcheck script.sh
 ```
 
 ---
@@ -1338,15 +1387,15 @@ today=$(date)
 
 ---
 
-## 15. `#!/bin/bash` 和 `set -euo pipefail` 分别解决什么问题？
+## 15. `#!/usr/bin/env bash` 和 `set -euo pipefail` 分别解决什么问题？
 
-### `#!/bin/bash`
+### `#!/usr/bin/env bash`
 
 叫 shebang。
 
 告诉系统：
 
-> 这个脚本应该使用 `/bin/bash` 来解释执行。
+> 在当前环境的 `$PATH` 中找到 `bash`，并用它解释执行脚本。
 
 ### `set -euo pipefail`
 

@@ -1,8 +1,12 @@
 # Missing Semester Lecture 2 — Cornell Notes
 
-> 课程：The Missing Semester of Your CS Education  
-> Lecture 2：Command-Line Environment  
-> 主题：程序参数、数据流、环境变量、退出码、Signals、Job Control、SSH、tmux、dotfiles
+> **课程：** The Missing Semester of Your CS Education
+>
+> **Lecture 2：** Command-Line Environment
+>
+> **主题：** 程序参数、数据流、环境变量、退出码、Signals、Job Control、SSH、tmux、dotfiles
+>
+> **参考：** [2026 中文课程页面](https://missing-semester-cn.github.io/2026/command-line-environment/)
 
 ---
 
@@ -757,6 +761,23 @@ kill PID
 kill -TERM 1234
 ```
 
+### `trap`：退出时清理
+
+Shell 脚本可以用 `trap` 在退出或收到信号时执行清理逻辑：
+
+```bash
+#!/usr/bin/env bash
+
+cleanup() {
+    rm -f /tmp/my-script.*
+}
+
+trap cleanup EXIT
+trap cleanup SIGINT SIGTERM
+```
+
+`EXIT` 会在脚本退出时触发；`SIGINT` 和 `SIGTERM` 分别覆盖终端中断和常规终止请求。
+
 ---
 
 ## 30. `Ctrl-C` vs `Ctrl-Z`
@@ -1220,6 +1241,41 @@ tldr
 
 ---
 
+## 51. Shell 中的 AI
+
+AI 工具可以在 Shell 中承担不同层次的工作：
+
+```text
+Command generation
+→ 根据自然语言生成命令
+
+Pipeline integration
+→ 从 stdin 读取数据并把结果写到 stdout
+
+AI shell
+→ 执行跨命令、跨文件的多步骤任务
+```
+
+使用 AI 生成命令时，先检查命令将读取、修改或删除哪些内容，再决定是否执行。尤其要谨慎对待 `rm`、重定向覆盖、权限修改和远程脚本。
+
+---
+
+## 52. Terminal Emulator
+
+Terminal、Shell 和命令行程序是不同层次：
+
+```text
+Terminal Emulator
+        ↓
+      Shell
+        ↓
+Command-Line Programs
+```
+
+Terminal Emulator 负责窗口、字体、配色、快捷键、标签页、分栏和回滚缓冲区；Shell 负责解析并运行命令。
+
+---
+
 # 第二讲知识地图
 
 ```text
@@ -1310,6 +1366,8 @@ dotfiles
 统一开发环境
 ```
 
+Terminal Emulator 提供承载 Shell 的窗口和交互界面；AI 工具可以参与命令生成、管道处理和多步骤任务，但执行前仍要检查命令的实际影响。
+
 第一讲解决：
 
 > **我怎么使用 Shell？**
@@ -1320,7 +1378,7 @@ dotfiles
 
 ---
 
-# 第二讲 15 个核心自测题
+# 第二讲 15 个核心自测题 + 答案
 
 ## 1. `ls -la folder` 中 program、argument、flag 分别是什么？
 
@@ -1330,13 +1388,19 @@ arguments: -la, folder
 flag: -la
 ```
 
+---
+
 ## 2. 为什么 `--` 可以解决 `-myfile` 这种文件名？
 
 因为它告诉程序：后面的内容不再按 flag 解析。
 
+---
+
 ## 3. `*.py` 是谁展开的？
 
 通常是 **Shell**。
+
+---
 
 ## 4. stdin、stdout、stderr 分别是什么？
 
@@ -1346,15 +1410,21 @@ stdout → 正常输出
 stderr → 错误输出
 ```
 
+---
+
 ## 5. `A | B` 真正连接的是什么？
 
 ```text
 A stdout → B stdin
 ```
 
+---
+
 ## 6. 为什么 stderr 默认不会进入 `|`？
 
 因为 pipe 默认只连接 stdout。
+
+---
 
 ## 7. `>`、`>>`、`2>`、`&>` 分别是什么？
 
@@ -1365,6 +1435,8 @@ A stdout → B stdin
 &>  stdout + stderr → 文件
 ```
 
+---
+
 ## 8. `$?` 是什么？
 
 上一条命令的 exit code。
@@ -1374,12 +1446,16 @@ A stdout → B stdin
 non-0 = failure
 ```
 
+---
+
 ## 9. `&&` 和 `||` 有什么区别？
 
 ```text
 A && B → A 成功才运行 B
 A || B → A 失败才运行 B
 ```
+
+---
 
 ## 10. `'...'` 和 `"..."` 有什么区别？
 
@@ -1388,12 +1464,16 @@ A || B → A 失败才运行 B
 "..." → 仍会变量展开
 ```
 
+---
+
 ## 11. `$()` 和 `<()` 有什么区别？
 
 ```text
 $(command) → command 的 stdout
 <(command) → 可以像文件一样使用的结果
 ```
+
+---
 
 ## 12. `foo=bar`、`export FOO=bar` 和 `FOO=bar command` 有什么区别？
 
@@ -1408,9 +1488,13 @@ FOO=bar command
 → 只临时提供给这一条 command
 ```
 
+---
+
 ## 13. 为什么 `$PATH` 属于 Environment Variable？
 
 因为它是一项进程环境配置，保存 executable 搜索目录。
+
+---
 
 ## 14. `Ctrl-C` 与 `Ctrl-Z` 有什么区别？
 
@@ -1418,6 +1502,8 @@ FOO=bar command
 Ctrl-C → SIGINT → 通常中断程序
 Ctrl-Z → SIGTSTP → 暂停程序
 ```
+
+---
 
 ## 15. SSH、tmux、dotfiles 分别解决什么问题？
 
@@ -1467,3 +1553,5 @@ dotfiles → 保存和同步配置
 | autosuggestions | 灰色历史补全 |
 | syntax-highlighting | 命令语法高亮 |
 | `tldr` | 简化版命令帮助 |
+| AI shell | 用自然语言辅助生成或执行 Shell 工作流 |
+| Terminal Emulator | 承载 Shell 的图形文本界面 |
